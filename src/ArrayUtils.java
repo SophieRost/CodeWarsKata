@@ -19,4 +19,11 @@ public final class ArrayUtils {
         final int[] flattenArray = streamList.stream().mapToInt(Integer::intValue).toArray();
         return flattenArray;
     }  
+
+
+    public static int[] arrayDiff(int[] a, int[] b) {
+        return Arrays.stream(a)
+                .filter(e -> Arrays.stream(b).noneMatch(n -> n == e))
+                .toArray();
+      }
 }
