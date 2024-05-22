@@ -1,0 +1,76 @@
+import java.util.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+    private  int[][] bombArea; 
+    private int[] batmanCurrentLocation;
+
+    private Player(int[][] buildingArea, int[] batmanInitialLocation) {
+        this.bombArea = buildingArea;
+        this.batmanCurrentLocation = batmanInitialLocation;
+    }
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        final int W = in.nextInt(); // width of the building.
+        final int H = in.nextInt(); // height of the building.
+        final int N = in.nextInt(); // maximum number of turns before game over.
+        final int X0 = in.nextInt();
+        final int Y0 = in.nextInt();
+
+        // System.out.println(Y0);
+         // W=4 X0=2 H=8 Y0=3
+
+        Player myGame = createMyGameObject(W, H, X0, Y0);
+
+        // game loop
+        while (true) {
+            String bombDir = in.next(); // the direction of the bombs from batman's current location (U, UR, R, DR, D, DL, L or UL)
+            for (char ch : bombDir.toCharArray()) {
+                redefineBombArea(ch, myGame);
+                };
+
+            final String nextLocation = getNextLocation(myGame);
+            // the location of the next window Batman should jump to.
+            System.out.println(nextLocation);
+        }
+    }
+
+        private static Player createMyGameObject(int W, int H, int X0, int Y0) {
+            int[][] buildingArea = { {0, W}, {0, H} };
+            int[] batmanInitialLocation = {X0, Y0};
+            return new Player(buildingArea, batmanInitialLocation);
+    }
+
+   private static void redefineBombArea(char dir, Player myGame) {
+   switch(dir){  
+       case 'U':
+        myGame.bombArea[1][1] = myGame.batmanCurrentLocation[1];
+           break;
+       case 'D':
+        myGame.bombArea[1][0] = myGame.batmanCurrentLocation[1];
+           break;
+       case 'R':
+        myGame.bombArea[0][0] = myGame.batmanCurrentLocation[0];
+           break;
+        case 'L':
+        myGame.bombArea[0][1] = myGame.batmanCurrentLocation[0];
+           break;
+       default:
+           System.out.println("Incorrect direction");
+           break;
+        }
+    }
+
+    private static String getNextLocation(Player myGame) {
+        for (int i = 0; i < 2; i++) {
+            myGame.batmanCurrentLocation[i]= Arrays.stream(myGame.bombArea[i]).sum()/2;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(myGame.batmanCurrentLocation[0]).append(" ").append(myGame.batmanCurrentLocation[1]);
+        return sb.toString();
+    }
+}
